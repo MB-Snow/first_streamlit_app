@@ -6,9 +6,7 @@ import snowflake.connector
 from urllib.error import URLError
 
 streamlit.title('My Parents New Healthy Diner')
-
 streamlit.header('Breakfast Favourites')
-
 streamlit.text('🥣 Omega 3 & Blue Berry Oatmeal')
 streamlit.text('🥗 Kale, Spinach & Rocket Smoothie')
 streamlit.text('🐔 Hard-boiled Free-Range Egg')
@@ -44,8 +42,7 @@ try:
     
 except URLError as e:
   streamlit.error()
-
-      
+    
 #import snowflake.connector
 streamlit.header("The fruit load list contains:")
 # Snowflake-related functions
@@ -63,9 +60,18 @@ if streamlit.button('Get Fruit Load List'):
 #Dont run anything pas here while we troubleshoot
 streamlit.stop()
 
-# Allow the end user to add a fruit to the list
-add_my_fruit = streamlit.text_input('What fruit would you like to add?', 'jackfruit')
-streamlit.write('Thanks for adding ', add_my_fruit)
 
-#This will not work correctly, but just go with it for now
-my_cur.execute("insert into fruit_load_list values ('from streamlit')")
+# Allow the end user to add a fruit to the list
+def insert_row_snowflake(new_fruit):
+    my_cur.execute("insert into fruit_load_list values ('from streamlit')")
+    return "Thanks for adding " + new_fruit
+
+add_my_fruit = streamlit.text_input('What fruit would you like to add?')
+if streamlit.button('Add a fruit to the List'):
+    my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+    back_from_function = insert_row_snowflae(add_my_fruit)
+    streamlit.text(back_from_function)
+    
+
+
+
